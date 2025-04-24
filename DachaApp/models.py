@@ -47,7 +47,13 @@ class Dacha(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    is_verified = models.BooleanField(default=False)
+    VERIFIED_TYPES = [
+        ('verified', 'Verified'),
+        ('not_verified', 'Not Verified'),
+        ('new', 'New'),
+    ]
+
+    is_verified = models.CharField(max_length=20, choices=VERIFIED_TYPES, default='new')
 
     def __str__(self):
         return self.name
@@ -77,8 +83,8 @@ class DachaReview(models.Model):
 
 class DachaReservation(models.Model):
     dacha = models.ForeignKey(Dacha, on_delete=models.CASCADE, related_name="reservations")
-    check_in = models.DateField()
-    check_out = models.DateField()
+    check_in = models.DateTimeField()
+    check_out = models.DateTimeField()
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -88,10 +94,10 @@ class DachaReservation(models.Model):
 
 class DachaAddress(models.Model):
     dacha = models.ForeignKey(Dacha, on_delete=models.CASCADE, related_name="addresses")
-    district = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    district = models.CharField(max_length=100, null=True, blank=True)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
 
     longitude = models.FloatField()
     latitude = models.FloatField()
@@ -100,3 +106,12 @@ class DachaAddress(models.Model):
 
     def __str__(self):
         return f"Address for {self.dacha.name}"
+
+
+class Favorites(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    dacha = models.ForeignKey(Dacha, on_delete=models.CASCADE, related_name='favorite_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'dacha')  # запрещает дублирование

@@ -23,6 +23,7 @@ router.register('dacha_image', views.DachaImageViewSet)
 router.register('dacha_review', views.DachaReviewViewSet)
 router.register('dacha_reservation', views.DachaReservationViewSet)
 router.register('dacha_address', views.DachaAddressViewSet)
+router.register('favorites', views.FavoriteViewSet)
 
 
 urlpatterns = [

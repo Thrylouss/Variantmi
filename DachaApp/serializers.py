@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Dacha, Category, DachaImage, DachaReview, DachaReservation, DachaAddress
+from .models import Dacha, Category, DachaImage, DachaReview, DachaReservation, DachaAddress, Favorites
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -41,3 +41,17 @@ class DachaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dacha
         fields = '__all__'
+
+
+class FavoritesSerializer(serializers.ModelSerializer):
+    dacha = DachaSerializer(read_only=True)  # Вложенный сериализатор для полной информации
+    dacha_id = serializers.PrimaryKeyRelatedField(
+        queryset=Dacha.objects.all(),
+        source='dacha',
+        write_only=True
+    )
+
+    class Meta:
+        model = Favorites
+        fields = ['id', 'user', 'dacha', 'dacha_id', 'created_at']
+        read_only_fields = ['user', 'created_at']

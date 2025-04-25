@@ -1,22 +1,27 @@
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
-from .serializers import CategorySerializer, DachaSerializer, DachaReviewSerializer, DachaReservationSerializer, \
-    DachaAddressSerializer, DachaImageSerializer, FavoritesSerializer
-from .models import Dacha, Category, DachaImage, DachaReview, DachaReservation, DachaAddress, Favorites
+from .serializers import DachaSerializer, DachaReviewSerializer, DachaReservationSerializer, \
+     DachaImageSerializer, FavoritesSerializer
+from .models import Dacha, DachaImage, DachaReview, DachaReservation, Favorites
 
 
 # Create your views here.
-class CategoryViewSet(ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+# class CategoryViewSet(ModelViewSet):
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
 
 
 class DachaViewSet(ModelViewSet):
     queryset = Dacha.objects.all()
     serializer_class = DachaSerializer
+    permission_classes = [permissions.IsAuthenticated]  # Только для аутентифицированных пользователей
+
+    def perform_create(self, serializer):
+        # Автоматически устанавливаем owner из текущего пользователя
+        serializer.save(owner=self.request.user)
 
     @action(detail=False, methods=['get'])
     def my_dachas(self, request):
@@ -36,9 +41,9 @@ class DachaReservationViewSet(ModelViewSet):
     serializer_class = DachaReservationSerializer
 
 
-class DachaAddressViewSet(ModelViewSet):
-    queryset = DachaAddress.objects.all()
-    serializer_class = DachaAddressSerializer
+# class DachaAddressViewSet(ModelViewSet):
+#     queryset = DachaAddress.objects.all()
+#     serializer_class = DachaAddressSerializer
 
 
 class DachaImageViewSet(ModelViewSet):

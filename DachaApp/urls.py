@@ -3,7 +3,6 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from . import views
 from .views import CustomTokenObtainPairView
@@ -23,7 +22,7 @@ router.register('dacha', views.DachaViewSet)
 router.register('dacha_review', views.DachaReviewViewSet)
 router.register('dacha_reservation', views.DachaReservationViewSet)
 router.register('favorites', views.FavoriteViewSet)
-# router.register('category', views.CategoryViewSet)
+router.register('category', views.CategoryViewSet)
 # router.register('dacha_image', views.DachaImageViewSet)
 # router.register('dacha_address', views.DachaAddressViewSet)
 

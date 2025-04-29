@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Dacha(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -45,6 +53,18 @@ class Dacha(models.Model):
     latitude = models.FloatField(null=True, blank=True)
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+
+    image1 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image2 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image3 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image4 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image5 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image6 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image7 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image8 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image9 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
+    image10 = models.ImageField(upload_to='dacha_images/', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     VERIFIED_TYPES = [
@@ -57,16 +77,6 @@ class Dacha(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class DachaImage(models.Model):
-    dacha = models.ForeignKey(Dacha, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to='dacha_images/')
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Image for {self.dacha.name}"
 
 
 class DachaReview(models.Model):

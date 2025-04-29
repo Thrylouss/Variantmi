@@ -1,18 +1,35 @@
 from rest_framework import serializers
-from .models import Dacha, DachaImage, DachaReview, DachaReservation, Favorites
-from djoser.serializers import TokenSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Dacha, DachaReview, DachaReservation, Favorites, Category
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
-# class CategorySerializer(serializers.ModelSerializer):
+# class DachaImageSerializer(serializers.ModelSerializer):
 #     class Meta:
-#         model = Category
+#         model = DachaImage
 #         fields = '__all__'
 
 
-class DachaImageSerializer(serializers.ModelSerializer):
+# class DachaAddressSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = DachaAddress
+#         fields = '__all__'
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data.update({
+            'user_id': self.user.id,
+            'is_staff': self.user.is_staff,
+        })
+
+        return data
+
+
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = DachaImage
+        model = Category
         fields = '__all__'
 
 
@@ -28,16 +45,10 @@ class DachaReservationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class DachaAddressSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = DachaAddress
-#         fields = '__all__'
-
-
 class DachaSerializer(serializers.ModelSerializer):
-    images = DachaImageSerializer(many=True, read_only=True)
     reviews = DachaReviewSerializer(many=True, read_only=True)
     reservations = DachaReservationSerializer(many=True, read_only=True)
+    category = CategorySerializer(read_only=True)
     # address = DachaAddressSerializer(many=True, read_only=True)
 
     class Meta:

@@ -3,15 +3,31 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .serializers import DachaSerializer, DachaReviewSerializer, DachaReservationSerializer, \
-     DachaImageSerializer, FavoritesSerializer
-from .models import Dacha, DachaImage, DachaReview, DachaReservation, Favorites
+    CategorySerializer, FavoritesSerializer, CustomTokenObtainPairSerializer
+from .models import Dacha, Category, DachaReview, DachaReservation, Favorites
 
 
 # Create your views here.
-# class CategoryViewSet(ModelViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
+# class DachaAddressViewSet(ModelViewSet):
+#     queryset = DachaAddress.objects.all()
+#     serializer_class = DachaAddressSerializer
+
+
+# class DachaImageViewSet(ModelViewSet):
+#     queryset = DachaImage.objects.all()
+#     serializer_class = DachaImageSerializer
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 class DachaViewSet(ModelViewSet):
@@ -39,16 +55,6 @@ class DachaReviewViewSet(ModelViewSet):
 class DachaReservationViewSet(ModelViewSet):
     queryset = DachaReservation.objects.all()
     serializer_class = DachaReservationSerializer
-
-
-# class DachaAddressViewSet(ModelViewSet):
-#     queryset = DachaAddress.objects.all()
-#     serializer_class = DachaAddressSerializer
-
-
-class DachaImageViewSet(ModelViewSet):
-    queryset = DachaImage.objects.all()
-    serializer_class = DachaImageSerializer
 
 
 class FavoriteViewSet(ModelViewSet):

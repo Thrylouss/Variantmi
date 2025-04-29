@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Dacha, DachaImage, DachaReview, DachaReservation, Favorites
+from .models import Dacha, DachaReview, DachaReservation, Favorites, Category
 
 # Register your models here.
-admin.site.register([Dacha, DachaImage, DachaReview, DachaReservation, Favorites])
+admin.site.register([Dacha, Category, DachaReview, DachaReservation, Favorites])
